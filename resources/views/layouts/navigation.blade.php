@@ -16,11 +16,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('games.index')" :active="request()->routeIs('games.index')">
-                        {{ __('View All Books') }}
+                        {{ __('View All Games') }}
                     </x-nav-link>
+                    
                 </div>
             </div>
-
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
