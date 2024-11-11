@@ -4,44 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class GameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $games = Game::all();
         return view("games.index", compact("games"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('games.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        
         $request->validate([
             'name' => 'required',
             'genre' => 'required|max:500',
             'tags' => 'required|integer',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
-        // Check if the image is uploaded and handle it
+        
+
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('images/books'), $imageName);
+            $request->image->move(public_path('images/games'), $imageName);
         }
-    
+
 
         Game::create([
             'name' => $request->name,
@@ -54,7 +50,7 @@ class GameController extends Controller
         ]);
     
  
-        return to_route('games.index')->with('success', 'Book created successfully!');
+        return to_route('games.index')->with('success', 'Game created successfully!');
     }
 
 
@@ -63,25 +59,51 @@ class GameController extends Controller
         return view('games.show')->with('game', $game);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Game $game)
     {
-        //
+        return view('games.edit', compact('game'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Game $game)
-    {
-        //
+{
+    // Validate the incoming data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'genre' => 'nullable|string|max:255',
+        'developer' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Debug: Check if the request is being received
+    \Log::info('Update request data:', $request->all());
+
+    // Handle image upload if there is a new image
+    if ($request->hasFile('image')) {
+        // Delete the old image if exists
+        if ($game->image) {
+            Storage::delete('images/games/' . $game->image);
+        }
+
+        // Save the new image
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images/games'), $imageName);
+        $validatedData['image'] = $imageName;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Update the game record
+    $game->update($validatedData);
+
+    // Debug: Confirm the update process
+    \Log::info('Updated game data:', $game->toArray());
+
+    // Redirect back with success message
+    return redirect()->route('games.index')->with('success', 'Game updated successfully!');
+}
+
+
     public function destroy(Game $game)
     {
         //

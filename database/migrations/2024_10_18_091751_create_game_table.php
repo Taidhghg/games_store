@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('genre')->nullable();
             $table->text('developer');
             $table->text('tags');
+            $table->text('description');
+            $table->string('imageName')->nullable();
             $table->timestamps();
         });
     }
