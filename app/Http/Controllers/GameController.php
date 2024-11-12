@@ -35,7 +35,7 @@ class GameController extends Controller
 
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('images/games'), $imageName);
+            $request->image->move(public_path('images/games/'), $imageName);
         }
 
 
@@ -67,8 +67,8 @@ class GameController extends Controller
 
 
     public function update(Request $request, Game $game)
-{
-    // Validate the incoming data
+    {
+
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'genre' => 'nullable|string|max:255',
@@ -77,35 +77,44 @@ class GameController extends Controller
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    // Debug: Check if the request is being received
+
     \Log::info('Update request data:', $request->all());
 
-    // Handle image upload if there is a new image
+
     if ($request->hasFile('image')) {
-        // Delete the old image if exists
+
         if ($game->image) {
             Storage::delete('images/games/' . $game->image);
         }
 
-        // Save the new image
+
         $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('images/games'), $imageName);
+        $request->image->move(public_path('images/games/'), $imageName);
         $validatedData['image'] = $imageName;
     }
 
-    // Update the game record
+
     $game->update($validatedData);
 
-    // Debug: Confirm the update process
+
     \Log::info('Updated game data:', $game->toArray());
 
-    // Redirect back with success message
-    return redirect()->route('games.index')->with('success', 'Game updated successfully!');
-}
 
-
-    public function destroy(Game $game)
-    {
-        //
+    return redirect()->route('games.show')->with('success', 'Game updated successfully!');
     }
+
+
+public function destroy(Game $game)
+{
+    try {
+        $game->delete();
+
+        if ($game->image) {
+            Storage::delete('images/games/' . $game->image);
+        }
+        return redirect()->route('games.index')->with('success', 'Game deleted successfully!');
+    } catch (\Exception $e) {
+        return redirect()->route('games.index')->with('error', 'Failed to delete the game.');
+    }
+}
 }

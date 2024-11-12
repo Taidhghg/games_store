@@ -24,6 +24,7 @@
                             </a>
 
 
+
                             <div class="mt-4 flex space-x-2">
 
                                 <a href="{{ route('games.edit', $game) }}" 
