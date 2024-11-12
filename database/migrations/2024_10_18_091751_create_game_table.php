@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
             $table->text('genre')->nullable();
             $table->text('developer');
             $table->text('tags');
             $table->text('description');
-            $table->string('imageName')->nullable();
+            $table->string('images')->nullable();
             $table->timestamps();
         });
     }

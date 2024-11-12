@@ -11,11 +11,11 @@
                     <div class="p-6 text-gray-900">
                         <h3 class="font-semibold text-lg mb-4">Game Details</h3>
                             <x-game-details
-                                :name="$game->name"
+                                :title="$game->title"
                                 :genre="$game->genre"
                                 :developer="$game->developer"
                                 :tags="$game->tags"
-                                :image="$game->image"
+                                :image="$game->images"
                                 :description="$game->description"
                             />
                     </div>

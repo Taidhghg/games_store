@@ -17,8 +17,8 @@
 
                             <a href="{{ route('games.show', $game) }}">
                                 <x-game-card
-                                    :name="$game->name"
-                                    :image="$game->image"
+                                    :title="$game->title"
+                                    :image="$game->images"
                                     :genre="$game->genre"
                                 />
                             </a>
