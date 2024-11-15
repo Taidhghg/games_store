@@ -22,6 +22,11 @@
         <x-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
             {{ __('Publish Your Game') }}
         </x-nav-link>
+        @if(auth()->user()->role === 'admin')
+        <x-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
+            {{ __('Create New Games') }}
+        </x-nav-link>
+        @endif
     @endauth
                     
                 </div>
