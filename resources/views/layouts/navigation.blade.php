@@ -18,16 +18,13 @@
                     <x-nav-link :href="route('games.index')" :active="request()->routeIs('games.index')">
                         {{ __('View All Games') }}
                     </x-nav-link>
-                    @auth
-        <x-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
-            {{ __('Publish Your Game') }}
-        </x-nav-link>
+                    
         @if(auth()->user()->role === 'admin')
         <x-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
-            {{ __('Create New Games') }}
+            {{ __('Publish new game') }}
         </x-nav-link>
         @endif
-    @endauth
+    
                     
                 </div>
             </div>
