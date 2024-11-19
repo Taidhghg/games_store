@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,9 @@ Route::delete('/games/{game}',[GameController::class, 'destroy'])->name('games.d
 Route::get('/games/{game}',[GameController::class, 'show'])->name('games.show');
 Route::patch('/games/{game}', [GameController::class, 'update'])->name('games.update');
 Route::post('/games',[GameController::class, 'store'])->name('games.store');
+
+Route::resource('reviews', ReviewController::class);
+Route::post('games/{game}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 
 Route::middleware('auth')->group(function () {

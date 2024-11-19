@@ -18,4 +18,8 @@ class Game extends Model
         'images',     
         'description', 
     ];
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }
