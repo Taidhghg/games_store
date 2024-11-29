@@ -22,6 +22,7 @@ Route::post('/games',[GameController::class, 'store'])->name('games.store');
 
 Route::resource('reviews', ReviewController::class);
 Route::post('games/{game}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::get('/games/{game}/reviews/edit', [GameController::class, 'edit'])->name('games.edit');
 
 
 Route::middleware('auth')->group(function () {
