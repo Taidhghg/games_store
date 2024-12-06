@@ -31,7 +31,8 @@ class GameController extends Controller
         $request->validate([
             'title' => 'required|string|max:255', 
             'genre' => 'required|string|max:500', 
-            'tags' => 'required|string', 
+            'tags' => 'array',
+            'tags.*' => 'exists:tags,id', 
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
             'developer' => 'required|string|max:255',
         ]);
@@ -43,23 +44,25 @@ class GameController extends Controller
         }
     
 
-        Game::create([
+        $game = Game::create([
             'title' => $request->title,
             'genre' => $request->genre,
-            'tags' => $request->tags, 
             'developer' => $request->developer, 
             'images' => $imageName, 
             'description' => $request->description, 
             'created_at' => now(), 
             'updated_at' => now(),
         ]);
+        if ($request->has('tags')) {
+            $game->tags()->attach($request->tags);
+        }
     
     
         return to_route('games.index')->with('success', 'Game created successfully!');
     }
     public function show(Game $game)
     {
-        $game->load('reviews.user');
+        $game->load('tags','reviews.user');
         return view('games.show')->with('game', $game);
         
         
@@ -78,15 +81,17 @@ class GameController extends Controller
             'title' => 'required|string|max:255',
             'genre' => 'required|string|max:255',
             'description' => 'required|string',
-            'tags' => 'nullable|string', 
+            'tags' => 'array',
+            'tags.*' => 'exists:tags,id', 
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
         ]);
     
         $game = Game::findOrFail($id);
-        $game->title = $validatedData['title'];
-        $game->genre = $validatedData['genre'];
-        $game->description = $validatedData['description'];
-        $game->tags = $validatedData['tags'] ?? '';
+        $game->update([
+            'title' => $validatedData['title'],
+            'genre' => $validatedData['genre'],
+            'description' => $validatedData['description'],
+        ]);
     
         if ($request->hasFile('image')) {
 
@@ -97,6 +102,10 @@ class GameController extends Controller
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images/games/', $imageName); 
             $game->image = $imageName;
+        }
+
+        if ($request->has('tags')) {
+            $game->tags()->sync($request->tags);
         }
     
         $game->save();

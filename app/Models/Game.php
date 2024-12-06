@@ -12,8 +12,7 @@ class Game extends Model
     // Add the fillable property
     protected $fillable = [
         'title',      
-        'genre',      
-        'tags',       
+        'genre',          
         'developer',  
         'images',     
         'description', 
@@ -22,4 +21,8 @@ class Game extends Model
     {
         return $this->hasMany(Review::class);
     }
+    public function tags()
+{
+    return $this->belongsToMany(Tag::class, 'game_tag');
+}
 }
