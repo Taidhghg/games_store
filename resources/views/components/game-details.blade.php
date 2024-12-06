@@ -1,4 +1,4 @@
-@props(['title', 'genre', 'developer', 'tags', 'image', 'description'])
+@props(['title', 'genre', 'developer', 'image', 'description'])
 
 <div class="border rounded-lg shadow-md p-6 bg-white hover:shadow-lg transition duration-300 max-w-xl mx-auto">
     <!-- Game Title -->
@@ -21,10 +21,6 @@
         Developer: {{ $developer }}
     </h2>
 
-    <!-- Tags -->
-    <h2 class="text-gray-500 text-sm italic mb-4" style="font-size: 1rem;">
-        Tags: {{ $tags }}
-    </h2>
 
     <!-- Game Description -->
     <h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">

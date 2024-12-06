@@ -14,10 +14,20 @@
                                 :title="$game->title"
                                 :genre="$game->genre"
                                 :developer="$game->developer"
-                                :tags="$game->tags"
+
                                 :image="$game->images"
                                 :description="$game->description"
                             />
+                            <h4 class="font-semibold text-md mt-4">Tags</h4>
+                            @if($game->tags->isEmpty())
+                            <p class="text-gray-600">No tags available.</p>
+                             @else
+                            <ul class="list-disc pl-5">
+                            @foreach($game->tags as $tag)
+                            <li class="text-gray-700">{{ $tag->name }}</li>
+                            @endforeach
+                            </ul>
+                            @endif
 
                             <h4 class="font-semibold text-md mt-8">Reviews</h4>
                             @if($game->reviews->isEmpty())
@@ -45,14 +55,6 @@
                             @endif
                             </li>
                             </ul>
-
-
-
-
-
-
-
-
                                 </li>
                                 @endforeach
                             </ul>
