@@ -80,6 +80,11 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        //
+        if (auth()->user()->id === $review->user_id || auth()->user()->role === 'admin') {
+            $review->delete();
+            return redirect()->back()->with('success', 'Review deleted successfully.');
+        }
+    
+        return redirect()->back()->with('error', 'You are not authorized to delete this review.');
     }
 }
